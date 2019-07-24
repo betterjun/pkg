@@ -2,6 +2,37 @@ package validation
 
 import "regexp"
 
+type VI interface {
+	// 全部
+	Required()
+
+	// 数字
+	Max(int)
+	Min(int)
+	Range(min, max int)
+
+	// 字符串和数组
+	Length(int)
+	MinLength(int)
+	MaxLength(int)
+
+	// 字符串
+	Alpha()
+	Numeric()
+	AlphaNumeric()
+	AlphaDash()
+	Email()
+	IP()
+	Base64()
+	Mobile()
+	Tel()
+	Phone()
+	ZipCode()
+
+	Match(regex *regexp.Regexp)
+	NoMatch(regex *regexp.Regexp)
+}
+
 // A Validation context manages data validation and error messages.
 type Validation struct {
 	Target interface{}
@@ -22,29 +53,26 @@ func (v *Validation) Required() *Validation {
 	return v.apply(Required{}, v.Target)
 }
 
-// Min Test that the obj is greater than min if obj's type is int
-func (v *Validation) Min(min int) *Validation {
-	return v.apply(Min{min}, v.Target)
+func (v *Validation) Min(val int) *Validation {
+	return v.apply(Min{val}, v.Target)
 }
 
-// Max Test that the obj is less than max if obj's type is int
-func (v *Validation) Max(max int) *Validation {
-	return v.apply(Max{max}, v.Target)
+func (v *Validation) Max(val int) *Validation {
+	return v.apply(Max{val}, v.Target)
 }
 
-// Range Test that the obj is between mni and max if obj's type is int
 func (v *Validation) Range(min, max int) *Validation {
-	return v.apply(Range{Min{Min: min}, Max{Max: max}}, v.Target)
+	return v.apply(Range{Min{min}, Max{max}}, v.Target)
 }
 
-// MinSize Test that the obj is longer than min size if type is string or slice
-func (v *Validation) MinSize(min int) *Validation {
-	return v.apply(MinSize{min}, v.Target)
+// MinLength Test that the obj is longer than min size if type is string or slice
+func (v *Validation) MinLength(min int) *Validation {
+	return v.apply(MinLength{min}, v.Target)
 }
 
-// MaxSize Test that the obj is shorter than max size if type is string or slice
-func (v *Validation) MaxSize(max int) *Validation {
-	return v.apply(MaxSize{max}, v.Target)
+// MaxLength Test that the obj is shorter than max size if type is string or slice
+func (v *Validation) MaxLength(max int) *Validation {
+	return v.apply(MaxLength{max}, v.Target)
 }
 
 // Length Test that the obj is same length to n if type is string or slice

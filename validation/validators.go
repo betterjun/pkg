@@ -28,8 +28,8 @@ var MessageTmpls = map[string]string{
 	"Min":          "Minimum is %d",
 	"Max":          "Maximum is %d",
 	"Range":        "Range is %d to %d",
-	"MinSize":      "Minimum size is %d",
-	"MaxSize":      "Maximum size is %d",
+	"MinLength":    "Minimum length is %d",
+	"MaxLength":    "Maximum length is %d",
 	"Length":       "Required length is %d",
 	"Alpha":        "Must be valid alpha characters",
 	"Numeric":      "Must be valid numeric characters",
@@ -106,7 +106,7 @@ func (r Required) DefaultMessage() string {
 
 // Min check struct
 type Min struct {
-	Min int
+	Val int
 }
 
 // IsSatisfied judge whether obj is valid
@@ -117,25 +117,25 @@ func (m Min) IsSatisfied(obj interface{}) bool {
 
 	switch v := obj.(type) {
 	case int:
-		return v >= int(m.Min)
+		return v >= int(m.Val)
 	case uint:
-		return v >= uint(m.Min)
+		return v >= uint(m.Val)
 	case int8:
-		return v >= int8(m.Min)
+		return v >= int8(m.Val)
 	case uint8:
-		return v >= uint8(m.Min)
+		return v >= uint8(m.Val)
 	case int16:
-		return v >= int16(m.Min)
+		return v >= int16(m.Val)
 	case uint16:
-		return v >= uint16(m.Min)
+		return v >= uint16(m.Val)
 	case int32:
-		return v >= int32(m.Min)
+		return v >= int32(m.Val)
 	case uint32:
-		return v >= uint32(m.Min)
+		return v >= uint32(m.Val)
 	case int64:
-		return v >= int64(m.Min)
+		return v >= int64(m.Val)
 	case uint64:
-		return v >= uint64(m.Min)
+		return v >= uint64(m.Val)
 	}
 
 	return false
@@ -143,12 +143,12 @@ func (m Min) IsSatisfied(obj interface{}) bool {
 
 // DefaultMessage return the default min error message
 func (m Min) DefaultMessage() string {
-	return fmt.Sprintf(MessageTmpls["Min"], m.Min)
+	return fmt.Sprintf(MessageTmpls["Min"], m.Val)
 }
 
-// Max validate struct
+// Max check struct
 type Max struct {
-	Max int
+	Val int
 }
 
 // IsSatisfied judge whether obj is valid
@@ -159,33 +159,33 @@ func (m Max) IsSatisfied(obj interface{}) bool {
 
 	switch v := obj.(type) {
 	case int:
-		return v <= int(m.Max)
+		return v <= int(m.Val)
 	case uint:
-		return v <= uint(m.Max)
+		return v <= uint(m.Val)
 	case int8:
-		return v <= int8(m.Max)
+		return v <= int8(m.Val)
 	case uint8:
-		return v <= uint8(m.Max)
+		return v <= uint8(m.Val)
 	case int16:
-		return v <= int16(m.Max)
+		return v <= int16(m.Val)
 	case uint16:
-		return v <= uint16(m.Max)
+		return v <= uint16(m.Val)
 	case int32:
-		return v <= int32(m.Max)
+		return v <= int32(m.Val)
 	case uint32:
-		return v <= uint32(m.Max)
+		return v <= uint32(m.Val)
 	case int64:
-		return v <= int64(m.Max)
+		return v <= int64(m.Val)
 	case uint64:
-		return v <= uint64(m.Max)
+		return v <= uint64(m.Val)
 	}
 
 	return false
 }
 
-// DefaultMessage return the default max error message
+// DefaultMessage return the default min error message
 func (m Max) DefaultMessage() string {
-	return fmt.Sprintf(MessageTmpls["Max"], m.Max)
+	return fmt.Sprintf(MessageTmpls["Max"], m.Val)
 }
 
 // Range Requires an integer to be within Min, Max inclusive.
@@ -201,16 +201,16 @@ func (r Range) IsSatisfied(obj interface{}) bool {
 
 // DefaultMessage return the default Range error message
 func (r Range) DefaultMessage() string {
-	return fmt.Sprintf(MessageTmpls["Range"], r.Min.Min, r.Max.Max)
+	return fmt.Sprintf(MessageTmpls["Range"], r.Min.Val, r.Max.Val)
 }
 
-// MinSize Requires an array or string to be at least a given length.
-type MinSize struct {
+// MinLength Requires an array or string to be at least a given length.
+type MinLength struct {
 	Min int
 }
 
 // IsSatisfied judge whether obj is valid
-func (m MinSize) IsSatisfied(obj interface{}) bool {
+func (m MinLength) IsSatisfied(obj interface{}) bool {
 	if str, ok := obj.(string); ok {
 		return utf8.RuneCountInString(str) >= m.Min
 	}
@@ -221,18 +221,18 @@ func (m MinSize) IsSatisfied(obj interface{}) bool {
 	return false
 }
 
-// DefaultMessage return the default MinSize error message
-func (m MinSize) DefaultMessage() string {
-	return fmt.Sprintf(MessageTmpls["MinSize"], m.Min)
+// DefaultMessage return the default MinLength error message
+func (m MinLength) DefaultMessage() string {
+	return fmt.Sprintf(MessageTmpls["MinLength"], m.Min)
 }
 
-// MaxSize Requires an array or string to be at most a given length.
-type MaxSize struct {
+// MaxLength Requires an array or string to be at most a given length.
+type MaxLength struct {
 	Max int
 }
 
 // IsSatisfied judge whether obj is valid
-func (m MaxSize) IsSatisfied(obj interface{}) bool {
+func (m MaxLength) IsSatisfied(obj interface{}) bool {
 	if str, ok := obj.(string); ok {
 		return utf8.RuneCountInString(str) <= m.Max
 	}
@@ -243,9 +243,9 @@ func (m MaxSize) IsSatisfied(obj interface{}) bool {
 	return false
 }
 
-// DefaultMessage return the default MaxSize error message
-func (m MaxSize) DefaultMessage() string {
-	return fmt.Sprintf(MessageTmpls["MaxSize"], m.Max)
+// DefaultMessage return the default MaxLength error message
+func (m MaxLength) DefaultMessage() string {
+	return fmt.Sprintf(MessageTmpls["MaxLength"], m.Max)
 }
 
 // Length Requires an array or string to be exactly a given length.
